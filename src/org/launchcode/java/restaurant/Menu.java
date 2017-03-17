@@ -3,22 +3,57 @@ package org.launchcode.java.restaurant;
 import java.time.LocalDate;
 import java.util.*;
 
-/**
- * Created by stephen on 3/13/17.
- */
 public class Menu {
     private Map<String, List<MenuItem>> items;
     private final LocalDate createdOn;
+    private LocalDate updatedOn;
 
     public Menu(List<MenuItem> items) {
-        this.items = new HashMap<>();
+        this();
         for(MenuItem item : items) {
-            if(!this.items.containsKey(item.getCategory())) {
-                this.items.put(item.getCategory(), new ArrayList<>());
-            }
+        }
+    }
+
+    public Menu() {
+        this.items = new HashMap<>();
+        this.createdOn = LocalDate.now();
+        updatedMenu();
+    }
+
+    public void addMenuItem(MenuItem item) {
+        if(!this.items.containsKey(item.getCategory())) {
+            this.items.put(item.getCategory(), new ArrayList<>());
+        }
+        if(!this.items.get(item.getCategory()).contains(item)) {
             this.items.get(item.getCategory()).add(item);
         }
-        this.createdOn = LocalDate.now();
+        updatedMenu();
+    }
+
+    public void removeMenuItem(MenuItem item) {
+        if(!this.items.containsKey(item.getCategory())) {
+            return;
+        }
+        this.items.get(item.getCategory()).remove(item);
+        updatedMenu();
+    }
+
+    private void updatedMenu() {
+        this.updatedOn = LocalDate.now();
+    }
+
+    @Override
+    public String toString() {
+        String menuString = "Menu\n\n";
+        for(String category : items.keySet()) {
+            menuString = menuString + category + "\n";
+            for(MenuItem item : items.get(category)){
+                menuString = menuString + item.getName() + "\t" + item.getPrice() + "\n";
+            }
+            menuString += "\n";
+        }
+        menuString += "Menu last updated on " + updatedOn;
+        return menuString;
     }
 
     public List<String> getCategories() {
@@ -34,6 +69,15 @@ public class Menu {
     }
 
     public static void main(String[] args) {
+        Menu menu = new Menu();
+        MenuItem pizza = new MenuItem("Pizza", 12.00, "Its pizza...", "Entree");
+        MenuItem pasta = new MenuItem("Pasta", 12.00, "Its pasta...", "Entree");
+        MenuItem iceCream = new MenuItem("Ice Cream", 12.00, "Its ice cream...", "Dessert");
 
+        menu.addMenuItem(pizza);
+        menu.addMenuItem(pasta);
+        menu.addMenuItem(iceCream);
+
+        System.out.print(menu);
     }
 }

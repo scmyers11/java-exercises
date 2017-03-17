@@ -57,4 +57,43 @@ public class MenuItem {
     public boolean isNew() {
         return createdOn.isAfter(LocalDate.now().minusDays(7));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MenuItem menuItem = (MenuItem) o;
+
+        if (Double.compare(menuItem.price, price) != 0) return false;
+        if (name != null ? !name.equals(menuItem.name) : menuItem.name != null) return false;
+        if (description != null ? !description.equals(menuItem.description) : menuItem.description != null)
+            return false;
+        if (category != null ? !category.equals(menuItem.category) : menuItem.category != null) return false;
+        return createdOn != null ? createdOn.equals(menuItem.createdOn) : menuItem.createdOn == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name != null ? name.hashCode() : 0;
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (createdOn != null ? createdOn.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "MenuItem{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", category='" + category + '\'' +
+                ", createdOn=" + createdOn +
+                '}';
+    }
 }
